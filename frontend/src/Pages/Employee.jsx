@@ -27,7 +27,7 @@ const Employee = () => {
   const fetchLeaveBalance = async () => {
     const employeeId = localStorage.getItem("employeeId");
     const response = await axios.get(
-      `http://localhost:5000/employees/${employeeId}/leave-balance`
+      `http://localhost:7000/employees/${employeeId}/leave-balance`
     );
     const updatedLeaveBalance = response.data.map(
       (leave) => (leave.leaveType, leave.leaveBalance)
@@ -84,7 +84,7 @@ const Employee = () => {
   
     try {
       const response = await axios.post(
-        "http://localhost:5000/employees/leave-requests",
+        "http://localhost:7000/employees/leave-requests",
         { leaveType, startDate, endDate, reason, employeeId }
       );
       // After submission, fetch leave history and balance
@@ -99,7 +99,7 @@ const Employee = () => {
     if (employeeId) {
       try {
         const response = await axios.get(
-          `http://localhost:5000/employees/${employeeId}/leaveRequests`
+          `http://localhost:7000/employees/${employeeId}/leaveRequests`
         );
         setLeaveHistory(response.data);
       } catch (error) {

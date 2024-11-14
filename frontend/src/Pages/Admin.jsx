@@ -8,20 +8,20 @@ const Admin = () => {
   const [leaveRequests, setLeaveRequests] = useState([]);
   const fetchLeaveRequests = async () => {
     const response = await axios.get(
-      "http://localhost:5000/admin/leave-requests"
+      "http://localhost:7000/admin/leave-requests"
     );
     setLeaveRequests(response.data);
   };
   const handleApprove = async (employeeId, id) => {
     console.log(employeeId, id);
     const response = await axios.post(
-      `http://localhost:5000/admin/approve-leave/${employeeId}/${id}`
+      `http://localhost:7000/admin/approve-leave/${employeeId}/${id}`
     );
     fetchLeaveRequests();
   };
   const handleReject = async (employeeId, id) => {
     const response = await axios.post(
-      `http://localhost:5000/admin/reject-leave/${employeeId}/${id}`
+      `http://localhost:7000/admin/reject-leave/${employeeId}/${id}`
     );
     fetchLeaveRequests();
   };
@@ -35,7 +35,7 @@ const Admin = () => {
     if(!token) {
       navigate('/login');
     }
-    const data = await axios.get('http://localhost:5000/admin', {
+    const data = await axios.get('http://localhost:7000/admin', {
       headers: {
         'x-auth-token': token
       }

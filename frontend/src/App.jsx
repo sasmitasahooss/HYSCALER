@@ -15,7 +15,7 @@ function App() {
       setUser('admin');
       navigate('/admin');
     } else {
-      const response = await axios.post('http://localhost:5000/employees/login',
+      const response = await axios.post('http://localhost:7000/employees/login',
         { email, password });  
       const result = response.data;
       if (result) {
