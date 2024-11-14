@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
+
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Employee = require('../models/userModel'); // Assumes you have a model for Employee
 const LeaveRequest = require('../models/leaveRequestModel'); // Assumes you have a model for LeaveRequest
-
+const {registerUser, loginUser} = require('../controller/authController');
 // Middleware to verify JWT token
 const verifyToken = (req, res, next) => {
     const token = req.header('Authorization')?.replace('Bearer ', ''); // Get token from Authorization header
@@ -21,67 +22,10 @@ const verifyToken = (req, res, next) => {
     }
 };
 
-// Register route for new employees
-router.post('/register', async (req, res) => {
-    try {
-        
-         const {name, email, password} = req.body;
-         const hashedPassword = await bcrypt.hash(password, 10);
-         const employee = await Employee.create({name, email, password: hashedPassword});
-         res.status(200).json({message: "User registered successfully", employee});
-         console.log(employee);
-    } catch (error) {
-        console.error("Error in registration:", error);
-        res.status(500).json({ message: "Email already exists", error: error.message });
-        console.log(error)
-    }
-});
+router.post("/register", registerUser);
+router.post("/login", loginUser);
 
 
-
-// Login route for employees
-router.post('/login', async (req, res) => {
-    try {
-        const employee = await Employee.findOne({ email: req.body.email });
-        if (!employee) return res.status(404).json({ message: "Employee not found" });
-
-        const passwordMatch = await bcrypt.compare(req.body.password, employee.password);
-        if (!passwordMatch) return res.status(400).json({ message: "Invalid credentials" });
-
-        const token = jwt.sign({ userId: employee._id }, process.env.SESSION_SECRET, { expiresIn: '1d' });
-        res.status(200).json({
-            message: 'Login successful',
-            resCode: 200,
-            role: employee.role,
-            id: employee._id,
-            token: token
-        });
-    } catch (error) {
-        console.error("Error in login:", error);
-        res.status(500).json({ message: "Server error", error: error.message });
-    }
-});
-
-router.get('/admin', verifyToken, (req, res) => {
-    res.json({message: "Admin route accessed"});
-});
-
-router.get('/employee', verifyToken, (req, res) => {
-    res.json({message: "Employee route accessed"});
-});
-
-// Route to fetch all leave requests
-router.get('/leaveRequests', async (req, res) => {
-    try {
-        const leaveRequests = await LeaveRequest.find();
-        res.json(leaveRequests);
-    } catch (error) {
-        console.error("Error fetching leave requests:", error);
-        res.status(500).json({ message: "Server error" });
-    }
-});
-
-// Route to create a new leave request
 router.post('/leave-requests', async (req, res) => {
     try {
         const { leaveType, startDate, endDate, reason, employeeId } = req.body;
