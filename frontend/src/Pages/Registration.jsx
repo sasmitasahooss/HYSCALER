@@ -15,7 +15,7 @@ const Registration = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`http://localhost:7000/employees/register`, { name, email, password })
+            const response = await axios.post(`http://localhost:8080/employees/register`, { name, email, password })
             setSuccessMessage(`User registered successfully`);
             setTimeout(() => {
                 navigate('/login');

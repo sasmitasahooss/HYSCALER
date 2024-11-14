@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 7000;
+const port = 8080;
 const path = require('path');
 const _dirname = path.resolve();
 
@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.static(path.join(_dirname, '/frontend/dist')));
-app.get('*', (req, res) => {
+app.get('*', (_, res) => {
   res.sendFile(path.join(_dirname, '/frontend/dist/index.html'));
 });
 app.get('/', (req, res) => {
