@@ -1,0 +1,87 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+}
+::-webkit-scrollbar {
+  display: none;
+}
+
+
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  width: 300px; 
+  margin-left: 2px;
+  /* border: 2px solid red; */
+}
+
+.navbar-logo img {
+  height: 45px;
+  max-width: 100%;  
+  margin-right: 1px; 
+  object-fit: cover;
+}
+
+.menu{
+  display: none;
+}
+
+/* src/components/LeaveCalendar.css */
+.leave-calendar {
+  text-align: center;
+  margin: 20px auto;
+}
+
+.leave-calendar h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.calendar-container {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 800px;
+}
+
+.leave-date {
+  background-color: #ffcccb; /* Red for leave days */
+  color: white;
+  border-radius: 50%;
+}
+
+.leave-details {
+  margin-top: 20px;
+  width: 100%;
+  max-width: 800px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+}
+
+.leave-details h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.leave-details ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.leave-details li {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.leave-details li strong {
+  font-size: 1.2rem;
+}
