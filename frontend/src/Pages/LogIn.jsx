@@ -1,5 +1,5 @@
 import React from 'react'
-import Button from '../Components/button'
+import Btn from '../Components/Btn'
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -43,7 +43,7 @@ import { useNavigate } from 'react-router-dom';
                 <input value={email} onChange={(e) => setEmail(e.target.value)} type="text" placeholder='Email' className='p-2 rounded-md'/>
                 <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder='Password' className='p-2 rounded-md'/>
                 <div className='flex justify-center'>
-                    <Button />
+                    <Btn />
                 </div>
                 <p className='text-white text-sm'>
                         Don't have an account? 
