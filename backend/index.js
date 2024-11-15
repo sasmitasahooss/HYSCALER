@@ -10,6 +10,7 @@ dotenv.config();
 const db = require('./Database/mongooseConnection');
 const employeesRoute = require('./routes/employeesRoute');
 const adminRoute = require('./routes/adminroute');
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());

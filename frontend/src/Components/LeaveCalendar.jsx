@@ -13,7 +13,7 @@ const LeaveCalendar = () => {
 
   const fetchLeaveRequests = async () => {
     try {
-      const response = await axios.get("http://localhost:3001/admin/leave-requests");
+      const response = await axios.get("http://localhost:8080/admin/leave-requests");
       const formattedLeaveHistory = response.data.map(request => {
         // Make sure the startDate and endDate are set to midnight
         const startDate = new Date(request.startDate);
@@ -43,11 +43,12 @@ const LeaveCalendar = () => {
       const leaveDates = leaveRequests.map((request) => ({
         start: new Date(request.startDate),
         end: new Date(request.endDate),
+        status: request.status
       }));
 
       // Check if any leave request falls on this date, with time comparison set to midnight
       const isLeaveDate = leaveDates.some(
-        ({ start, end }) => date >= start && date <= end
+        ({ start, end, status }) => date >= start && date <= end && (status === 'approved' || status === 'pending')
       );
 
       return isLeaveDate ? 'leave-date' : null;
@@ -85,6 +86,7 @@ const LeaveCalendar = () => {
               <li key={index}>
                 <strong>{leave.name}</strong> - {leave.leaveType}
                 <p>Reason: {leave.reason}</p>
+                <p>Status: {leave.status}</p>
               </li>
             ))}
           </ul>

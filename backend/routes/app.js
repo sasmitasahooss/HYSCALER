@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const LeaveRequest = require('../models/leaveRequestModel');
-const verifyToken = require('../middleware/authMiddleware');
+const verifyToken = require('../middleware/verifyToken');
 router.get('/admin', verifyToken, (req, res) => {
     res.json({message: "Admin route accessed"});
 });

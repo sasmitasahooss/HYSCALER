@@ -12,7 +12,7 @@ const Header = () => {
     <>
       <div className=" header flex justify-betwwen border-2 gap-4 bg-[#0e2d49] h-10vh w-screen">
         <div className="navbar-logo">
-        <img src="" alt="" />
+        <img src="https://hyscaler.com/assets/logo/hyscaler-logo.svg" alt="" />
         </div>
         
         <div className="flex justify-between text-white text-xl items-center gap-24 ml-60">
