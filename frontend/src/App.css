@@ -33,6 +33,18 @@ html, body {
 .menu{
   display: none;
 }
+.lform{
+  /* position: relative; */
+  width: 100vw;
+  height: auto;
+  /* gap: 70; */
+  margin-top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+
+}
 
 /* src/components/LeaveCalendar.css */
 .leave-calendar {
@@ -84,4 +96,89 @@ html, body {
 
 .leave-details li strong {
   font-size: 1.2rem;
+}
+
+
+.success-message {
+  position: fixed;
+  top: 50px;
+  left: 55%;
+  transform: translateX(-50%);
+  background-color: #4caf50; /* Green background */
+  color: white; /* White text */
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000; /* Ensure it stays on top */
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  animation: fadeInOut 3s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+
+.error-message {
+  position: fixed;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ff4d4d; /* Red background */
+  color: white; /* White text */
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000; /* Ensure it stays on top */
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  animation: fadeInOut 3s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+
+table{
+  width: 100%;
+  table-layout: fixed;
+}
+td{
+  overflow: hidden;
+}
+
+@media (max-width:600px){
+  .a{
+    display: none;
+  }
+  .menu{
+    display: block;
+    margin-top: 5px;
+  }
 }

@@ -1,8 +1,5 @@
 const express = require('express');
 const router = express.Router();
-
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const Employee = require('../models/userModel'); // Assumes you have a model for Employee
 const LeaveRequest = require('../models/leaveRequestModel'); // Assumes you have a model for LeaveRequest
 const {registerUser, loginUser} = require('../controller/authController');
@@ -15,14 +12,11 @@ router.post("/login", loginUser);
 router.post('/leave-requests', async (req, res) => {
     try {
         const { leaveType, startDate, endDate, reason, employeeId } = req.body;
-
-        console.log(leaveType, startDate, endDate, reason, employeeId);
-
         const start = new Date(startDate);
         const end = new Date(endDate);
         const calculateDurationInDays = (start, end) => {
             const differenceInTime = end - start;
-            const differenceInDays = differenceInTime / (1000 * 60 * 60 * 24);
+            const differenceInDays = (differenceInTime / (1000 * 60 * 60 * 24))+1;
             return differenceInDays;
         };
         const durationInDays = calculateDurationInDays(start, end);

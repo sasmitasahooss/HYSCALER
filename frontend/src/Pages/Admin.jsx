@@ -54,7 +54,7 @@ const Admin = () => {
       <Header />
       <div className="leave-request-list mt-10 w-screen flex flex-col items-center justify-center">
         <h2 className="text-2xl font-bold mb-4">Leave Request List</h2>
-        <table className="request-list border-2 rounded-md border-[#0e2d49] w-[80vw]">
+        <table className="request-list border-2 rounded-md border-[#0e2d49] ">
           <thead>
             <tr className="border-b-2 bg-[#5ec5d4] border-[#0e2d49]">
               <th className="border-r-2 border-[#0e2d49]">Employee ID</th>

@@ -10,6 +10,9 @@ const Employee = () => {
   const [leaveHistory, setLeaveHistory] = useState([]);
   const [leaveBalance, setLeaveBalance] = useState();
   const [leaveCounts, setLeaveCounts] = useState();
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
 
   const navigate = useNavigate();
   const secureEmployeeRoute = async () => {
@@ -29,9 +32,11 @@ const Employee = () => {
     const response = await axios.get(
       `http://localhost:8080/employees/${employeeId}/leave-balance`
     );
+    console.log(response)
     const updatedLeaveBalance = response.data.map(
       (leave) => (leave.leaveType, leave.leaveBalance)
     );
+    console.log(updatedLeaveBalance)
     const flattenedLeaveRequests = updatedLeaveBalance.flat();
     const leaveTaken = flattenedLeaveRequests.reduce((acc, leave) => {
       if (acc[leave.leaveType]) {
@@ -41,6 +46,7 @@ const Employee = () => {
       }
       return acc;
     }, {});
+    console.log(leaveTaken)
     setLeaveBalance(leaveTaken);
   };
   const handleSubmit = async (e) => {
@@ -59,27 +65,52 @@ const Employee = () => {
       return;
     }
   
+
+    if (new Date(endDate) < new Date(startDate)) {
+      console.error("End date cannot be before start date.");
+      setErrorMessage("End date cannot be before start date.");
+      setTimeout(()=>setErrorMessage(''),2000);
+      return;
+    }
     // Check if the leave balance will go negative
     if (leaveType && leaveBalance) {
       const leaveTakenForType = leaveBalance[leaveType] || 0;
       let durationInDays = (new Date(endDate) - new Date(startDate)) / (1000 * 3600 * 24) + 1; // calculate the leave duration in days
   
-      if (leaveTakenForType + durationInDays > 5 && leaveType === "Sick Leave") {
-        console.error("You do not have enough Sick Leave balance.");
-        return;
-      }
-      if (leaveTakenForType + durationInDays > 10 && leaveType === "Vacation Leave") {
-        console.error("You do not have enough Vacation Leave balance.");
-        return;
-      }
-      if (leaveTakenForType + durationInDays > 90 && leaveType === "Maternity Leave") {
-        console.error("You do not have enough Maternity Leave balance.");
-        return;
-      }
-      if (leaveTakenForType + durationInDays > 15 && leaveType === "Paternity Leave") {
-        console.error("You do not have enough Paternity Leave balance.");
-        return;
-      }
+
+if (leaveType && leaveBalance) {
+  const leaveTakenForType = leaveBalance[leaveType] || 0; // Default to 0 if undefined
+  const maxLeavesAllowed = {
+    "Sick Leave": 5,
+    "Vacation Leave": 10,
+    "Maternity Leave": 90,
+    "Paternity Leave": 15,
+  };
+
+  const remainingBalance = maxLeavesAllowed[leaveType] - leaveTakenForType;
+  if (remainingBalance < durationInDays) {
+    setErrorMessage(`Insufficient balance: You only have ${remainingBalance} ${leaveType} days remaining.`);
+    setTimeout(() => setErrorMessage(""), 2000); // Clear the message after 3 seconds
+    return;
+  }
+}
+
+      // if (leaveTakenForType + durationInDays > 5 && leaveType === "Sick Leave") {
+      //   console.error("You do not have enough Sick Leave balance.");
+      //   return;
+      // }
+      // if (leaveTakenForType + durationInDays > 10 && leaveType === "Vacation Leave") {
+      //   console.error("You do not have enough Vacation Leave balance.");
+      //   return;
+      // }
+      // if (leaveTakenForType + durationInDays > 90 && leaveType === "Maternity Leave") {
+      //   console.error("You do not have enough Maternity Leave balance.");
+      //   return;
+      // }
+      // if (leaveTakenForType + durationInDays > 15 && leaveType === "Paternity Leave") {
+      //   console.error("You do not have enough Paternity Leave balance.");
+      //   return;
+      // }
     }
   
     try {
@@ -90,6 +121,12 @@ const Employee = () => {
       // After submission, fetch leave history and balance
       fetchLeaveHistory();
       fetchLeaveBalance();
+      setLeaveType("");
+      setStartDate("");
+      setEndDate("");
+      setReason("");
+      setSuccessMessage("Leave request submitted successfully!");
+    setTimeout(() => setSuccessMessage(""), 3000);
     } catch (error) {
       console.error("Error submitting leave request:", error);
     }
@@ -112,8 +149,21 @@ const Employee = () => {
   return (
     <>
       <Header />
-      <div className="lform flex items-center justify-between gap-70 rounded-lg mt-0 h-[80vh] w-[80vw] ml-20 flex-wrap">
-        <div className="leave-request-form border-2 rounded-lg border-[#0e2d49] flex flex-col items-center h-[80vh] w-[40vw] mt-5 ml-10">
+      {successMessage && (
+  <div className="success-message bg-green-500 text-white p-3 rounded-md mb-4">
+    {successMessage}
+  </div>
+)}
+
+
+      {errorMessage && (
+  <div className="error-message bg-red-500 text-white p-3 rounded-md mb-4">
+    {errorMessage}
+  </div>
+)}
+
+      <div className="lform border-2">
+        <div className="leave-request-form border-2 rounded-lg border-[#0e2d49] flex flex-col items-center px-10 mt-5">
           <h2 className="text-2xl text-[#0e2d49] mt-10 font-bold">
             Leave Request Form
           </h2>
@@ -193,19 +243,22 @@ const Employee = () => {
         <div className="grid grid-cols-2 gap-4 rounded-lg mt-10 md:mt-0">
           <div className="bg-blue-500 p-4 rounded-lg">
             <h3 className="text-white">Sick Leave</h3>
-            <p className="text-white">Balance: {5 - (leaveBalance?.["Sick Leave"]) || 5} days</p>
+            <p className="text-white">      Balance: {leaveBalance?.["Sick Leave"] !== undefined ? 5 - leaveBalance["Sick Leave"] : 5} days
+            </p>
           </div>
           <div className="bg-green-500 p-4 rounded-lg">
             <h3 className="text-white">Vacation Leave</h3>
-            <p className="text-white">Balance: {10 - (leaveBalance?.["Vacation Leave"]) || 10} days</p>
+            <p className="text-white">      Balance: {leaveBalance?.["Vacation Leave"] !== undefined ? 10 - leaveBalance["Vacation Leave"] : 10} days
+            </p>
           </div>
           <div className="bg-yellow-500 p-4 rounded-lg">
             <h3 className="text-white">Maternity Leave</h3>
-            <p className="text-white">Balance: {90 - (leaveBalance?.["Maternity Leave"]) || 90} days</p>
+            <p className="text-white">      Balance: {leaveBalance?.["Maternity Leave"] !== undefined ? 90 - leaveBalance["Maternity Leave"] : 90} days
+            </p>
           </div>
           <div className="bg-red-500 p-4 rounded-lg">
             <h3 className="text-white">Paternity Leave</h3>
-            <p className="text-white">Balance: {15 - (leaveBalance?.["Paternity Leave"]) || 15} days</p>
+            <p className="text-white">Balance: {leaveBalance?.["Paternity Leave"] !== undefined ? 15 - leaveBalance["Paternity Leave"] : 15} days</p>
           </div>
         </div>
       </div>
